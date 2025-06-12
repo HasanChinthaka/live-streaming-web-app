@@ -18,13 +18,14 @@ const Home = () => {
     <div className='w-full h-screen'>
       <section className='bg-gray-950 text-white'>
         <div className="mx-auto max-w-screen-xl h-screen px-4 md:py-12 py-32 flex-col gap-24 flex items-center">
-          <Image src="/logo.png" alt='log' width={200} height={200}/>
+          <Image src="/logo.png" alt='log' width={200} height={200} />
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="bg-gradient-to-r h-[60px] from-green-300 via-blue-500 to-purple-600 bg-clip-text font-extrabold text-transparent text-5xl">
               {`Have a smooth live streaming`}
             </h1>
-            <p className="mx-auto mt-6 ma-w-xl sm:text-xl/relaxed">
-              Connect and broadcast in real-time with our powerful live streaming web app powered by ZEGOCLOUD. Whether you're a host, co-host, or viewer, join interactive live sessions with high-quality audio and video. Start your stream, invite others, or explore live events happening now!
+            <p className="mx-auto mt-6 max-w-4xl sm:text-xl/relaxed">
+              Go live, join a stream, or watch others — it’s easy and fun! <br />
+              <span className='text-base'>Just choose your role (Host, Co-host, or Audience) and start connecting with people in real-time.</span>
             </p>
             <div className="flex items-center justify-center gap-4 mt-6">
               <input
