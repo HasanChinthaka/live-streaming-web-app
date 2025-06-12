@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { v4 as uuid } from "uuid";
 
-const page = () => {
+const Home = () => {
   const [roomID, setRoomID] = useState("");
   const router = useRouter();
   const { fullName, setFullName } = useUser();
@@ -17,8 +17,8 @@ const page = () => {
   return (
     <div className='w-full h-screen'>
       <section className='bg-gray-950 text-white'>
-        <div className='mx-auto max-w-screen h-screen px-4 py-32 text-col gap-24 flex justify-center'>
-          {/* <Image src="/logo.svg" alt='log' width={200} height={200}  /> */}
+        <div className="mx-auto max-w-screen-xl h-screen px-4 md:py-12 py-32 flex-col gap-24 flex items-center">
+          <Image src="/logo.png" alt='log' width={200} height={200}/>
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="bg-gradient-to-r h-[60px] from-green-300 via-blue-500 to-purple-600 bg-clip-text font-extrabold text-transparent text-5xl">
               {`Have a smooth live streaming`}
@@ -71,4 +71,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Home

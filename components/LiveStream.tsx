@@ -1,71 +1,68 @@
-"use client"
+"use client";
 
+import { useEffect, useRef } from 'react';
 import useUser from '@/hooks/useUser';
 import { usePathname, useSearchParams } from 'next/navigation';
-import React, { useState, useEffect } from 'react'
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
 import { v4 as uuid } from "uuid";
 
 const LiveStream = ({ roomid }: { roomid: string }) => {
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-    const { fullName } = useUser();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { fullName } = useUser(); // fixed typo: `fullName` should match your Zustand store
 
-    const role_str = searchParams.get("role") || "Host";
-    const role =
-        role_str === 'Host'
-            ? ZegoUIKitPrebuilt.Host
-            : role_str === 'Cohost'
-                ? ZegoUIKitPrebuilt.Cohost
-                : ZegoUIKitPrebuilt.Audience;
+  const roleStr = searchParams.get("role") || "Host";
+  const role =
+    roleStr === 'Host'
+      ? ZegoUIKitPrebuilt.Host
+      : roleStr === 'Cohost'
+        ? ZegoUIKitPrebuilt.Cohost
+        : ZegoUIKitPrebuilt.Audience;
 
-    let sharedLinks = [];
-    const currentUrl = window.location.host + pathname;
-    if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
-        sharedLinks.push({
-            name: "Join as co-host",
-            url: `${currentUrl}?role=Cohost`,
-        })
-    }
-    sharedLinks.push({
-        name: "Join as audience",
-        url: `${currentUrl}?role=Audience`,
-    })
+  useEffect(() => {
+    if (!containerRef.current) return;
 
     const appID = parseInt(process.env.NEXT_PUBLIC_ZEGO_APP_ID!);
     const serverSecret = process.env.NEXT_PUBLIC_ZEGO_SERVER_SECRET!;
+    const userName = fullName || `User-${Date.now()}`;
 
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-        appID,
-        serverSecret,
-        roomid,
-        uuid(),
-        fullName || "" + Date.now(),
-        720
+      appID,
+      serverSecret,
+      roomid,
+      uuid(),
+      userName,
+      720
     );
 
-    let myMeeting: any = async (element: any) => {
-        // Create instance object from Kit Token.
-        const zp = ZegoUIKitPrebuilt.create(kitToken);
-        // start the call
-        zp.joinRoom({
-            container: element,
-            scenario: {
-                mode: ZegoUIKitPrebuilt.LiveStreaming,
-                config: {
-                    role,
-                },
-            },
-            sharedLinks,
-        });
-    };
+    const sharedLinks: { name: string; url: string }[] = [];
+    const currentUrl = `${window.location.origin}${pathname}`;
+    if (role === ZegoUIKitPrebuilt.Host || role === ZegoUIKitPrebuilt.Cohost) {
+      sharedLinks.push({
+        name: "Join as co-host",
+        url: `${currentUrl}?role=Cohost`,
+      });
+    }
+    sharedLinks.push({
+      name: "Join as audience",
+      url: `${currentUrl}?role=Audience`,
+    });
 
-    console.log(sharedLinks)
+    const zp = ZegoUIKitPrebuilt.create(kitToken);
+    zp.joinRoom({
+      container: containerRef.current,
+      scenario: {
+        mode: ZegoUIKitPrebuilt.LiveStreaming,
+        config: { role },
+      },
+      sharedLinks,
+    });
+  }, [roomid, pathname, role, fullName]);
 
-    return (
+  return (
+    <div ref={containerRef} className="w-full h-screen" />
+  );
+};
 
-        <div ref={myMeeting} className='w-full h-screen'></div>
-    )
-}
-
-export default LiveStream
+export default LiveStream;
