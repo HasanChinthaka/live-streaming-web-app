@@ -24,7 +24,7 @@ const Home = () => {
               {`Have a smooth live streaming`}
             </h1>
             <p className="mx-auto mt-6 ma-w-xl sm:text-xl/relaxed">
-              description
+              Connect and broadcast in real-time with our powerful live streaming web app powered by ZEGOCLOUD. Whether you're a host, co-host, or viewer, join interactive live sessions with high-quality audio and video. Start your stream, invite others, or explore live events happening now!
             </p>
             <div className="flex items-center justify-center gap-4 mt-6">
               <input
